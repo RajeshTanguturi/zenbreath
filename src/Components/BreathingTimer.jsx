@@ -30,10 +30,10 @@ const BreathingTimer = () => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (showThemeSelector &&
-          themeButtonRef.current && 
-          themeSelectorRef.current &&
-          !themeButtonRef.current.contains(event.target) && 
-          !themeSelectorRef.current.contains(event.target)) {
+        themeButtonRef.current &&
+        themeSelectorRef.current &&
+        !themeButtonRef.current.contains(event.target) &&
+        !themeSelectorRef.current.contains(event.target)) {
         setShowThemeSelector(false);
       }
     };
@@ -174,7 +174,7 @@ const BreathingTimer = () => {
             </button>
 
             {showThemeSelector && (
-              <div 
+              <div
                 ref={themeSelectorRef}
                 className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white/20 backdrop-blur-lg rounded-2xl p-4 shadow-xl border border-white/30 z-50"
               >
@@ -184,8 +184,8 @@ const BreathingTimer = () => {
                       key={index}
                       onClick={() => selectTheme(index)}
                       className={`relative p-3 rounded-xl transition-all duration-200 text-sm font-medium overflow-hidden ${currentTheme === index
-                          ? 'ring-2 ring-white/70 ring-offset-2'
-                          : 'hover:ring-2 hover:ring-white/40 ring-offset-2'
+                        ? 'ring-2 ring-white/70 ring-offset-2'
+                        : 'hover:ring-2 hover:ring-white/40 ring-offset-2'
                         }`}
                     >
                       <div className={`absolute inset-0 ${theme.gradient} opacity-80`} />
@@ -209,18 +209,35 @@ const BreathingTimer = () => {
           </div>
 
           {/* Breathing Circle */}
-          <div className="relative mb-8">
-            <div className="w-48 h-48 mx-auto rounded-full border-4 border-white/30 relative overflow-hidden">
+          {/* Breathing Circle - Updated */}
+          <div className="relative mb-8 flex justify-center">
+            <div className="w-48 h-48 relative">
+              {/* Background circle */}
+              <div className="absolute inset-0 rounded-full border-4 border-white/30" />
+
+              {/* Scaling animation layer */}
               <div
                 className={`absolute inset-0 rounded-full transition-all duration-1000 ease-in-out ${currentConfig.color} opacity-20`}
-                style={{ transform: `scale(${isRunning ? 0.3 + (progress / 100) * 0.7 : 0.3})` }}
+                style={{
+                  transform: `scale(${isRunning ? 0.3 + (progress / 100) * 0.7 : 0.3})`,
+                  margin: 'auto'
+                }}
               />
+
+              {/* SVG progress circle */}
               <svg className="absolute inset-0 w-full h-full transform -rotate-90">
-                <circle cx="96" cy="96" r="88" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
                 <circle
-                  cx="96"
-                  cy="96"
-                  r="88"
+                  cx="50%"
+                  cy="50%"
+                  r="44%"
+                  fill="none"
+                  stroke="rgba(255,255,255,0.1)"
+                  strokeWidth="8"
+                />
+                <circle
+                  cx="50%"
+                  cy="50%"
+                  r="44%"
                   fill="none"
                   stroke="rgba(255,255,255,0.8)"
                   strokeWidth="8"
@@ -230,6 +247,8 @@ const BreathingTimer = () => {
                   style={{ transition: countdown <= 0.1 ? 'none' : 'stroke-dashoffset 100ms ease-out' }}
                 />
               </svg>
+
+              {/* Pulsing effect layer */}
               <div
                 className={`absolute inset-8 rounded-full transition-all ease-in-out ${currentConfig.color} opacity-10`}
                 style={{
@@ -237,13 +256,14 @@ const BreathingTimer = () => {
                   transitionDuration: '1000ms',
                 }}
               />
+
+              {/* Center display */}
               <div className="absolute inset-4 bg-white/5 rounded-full flex flex-col items-center justify-center backdrop-blur-sm border border-white/10">
                 <div className="text-white text-xl font-bold mb-1 capitalize">{phase}</div>
                 <div className="text-white text-4xl font-bold">{displayCountdown}</div>
               </div>
             </div>
           </div>
-
           {/* Instructions */}
           <div className="text-white/80 mb-6 text-sm">
             {phase === 'inhale' && 'Breathe in slowly through your nose'}
